@@ -102,18 +102,17 @@ fun CustomScrollableTabRow(
     val backgroundColor = Color.hsv(0f, 0f, 0.97f)
     val density = LocalDensity.current
     val tabWidths = remember {
-        val tabWidthStateList = mutableStateListOf<Dp>()
-        repeat(tabs.size) {
-            tabWidthStateList.add(0.dp)
+        mutableStateListOf<Dp>().apply {
+            repeat(tabs.size) {
+                add(0.dp)
+            }
         }
-        tabWidthStateList
     }
 
     Column(
         modifier = Modifier
-            .fillMaxWidth()
+            .fillMaxSize()
             .background(backgroundColor)
-
     ) {
         TabRow(
             modifier = Modifier.fillMaxWidth(),
@@ -149,8 +148,7 @@ fun CustomScrollableTabRow(
                             },
                             fontSize = 14.sp,
                             onTextLayout = { textLayoutResult ->
-                                tabWidths[tabIndex] =
-                                    with(density) { textLayoutResult.size.width.toDp() }
+                                tabWidths[tabIndex] = with(density) { textLayoutResult.size.width.toDp() }
                             }
                         )
                         if (tab.tabNotiCount > 0) {
@@ -188,12 +186,13 @@ fun CustomScrollableTabRow(
                     }
                 }
             }
-//            when (selectedTabIndex) {
-//                0 -> All()
-//                1 -> Friends()
-//                2 -> FromForte()
-//                3 -> Partner()
-//            }
+        }
+
+        when (selectedTabIndex) {
+            0 -> All()
+            1 -> Friends()
+            2 -> FromForte()
+            3 -> Partner()
         }
     }
 }
