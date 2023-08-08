@@ -123,9 +123,10 @@ fun CustomScrollableTabRow(
                 Box(
                     modifier = Modifier
                         .customTabIndicatorOffset(
-                        currentTabPosition = tabPositions[selectedTabIndex],
-                        tabWidth = tabWidths[selectedTabIndex],
-                    )
+                            currentTabPosition = tabPositions[selectedTabIndex],
+                            tabWidth = tabWidths[selectedTabIndex],
+                            totalTabWidth = tabWidths[selectedTabIndex]
+                        )
                         .height(4.dp)
                         .clip(RoundedCornerShape(8.dp))
                         .background(indicatorColor)
@@ -153,7 +154,10 @@ fun CustomScrollableTabRow(
                             },
                             fontSize = 14.sp,
                             onTextLayout = { textLayoutResult ->
-                                tabWidths[tabIndex] = with(density) { textLayoutResult.size.width.toDp() }
+                                val textWidth = with(density) { textLayoutResult.size.width.toDp() }
+                                val badgeWidth = if (tab.tabNotiCount > 0) 20.dp else 0.dp
+                                val totalTabWidth = textWidth + badgeWidth
+                                tabWidths[tabIndex] = totalTabWidth
                             }
                         )
                         if (tab.tabNotiCount > 0) {
@@ -205,7 +209,8 @@ fun CustomScrollableTabRow(
 
 fun Modifier.customTabIndicatorOffset(
     currentTabPosition: TabPosition,
-    tabWidth: Dp
+    tabWidth: Dp,
+    totalTabWidth: Dp
 ): Modifier = composed(
     inspectorInfo = debugInspectorInfo {
         name = "customTabIndicatorOffset"
@@ -213,11 +218,11 @@ fun Modifier.customTabIndicatorOffset(
     }
 ) {
     val currentTabWidth by animateDpAsState(
-        targetValue = tabWidth,
+        targetValue = totalTabWidth,
         animationSpec = tween(durationMillis = 250, easing = FastOutSlowInEasing)
     )
     val indicatorOffset by animateDpAsState(
-        targetValue = ((currentTabPosition.left + currentTabPosition.right - tabWidth) / 2),
+        targetValue = ((currentTabPosition.left + currentTabPosition.right - totalTabWidth) / 2),
         animationSpec = tween(durationMillis = 250, easing = FastOutSlowInEasing)
     )
     fillMaxWidth()
