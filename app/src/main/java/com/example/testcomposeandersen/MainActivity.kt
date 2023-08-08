@@ -3,6 +3,7 @@ package com.example.testcomposeandersen
 import android.os.Bundle
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
+import androidx.compose.foundation.Indication
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
@@ -13,11 +14,16 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
+import androidx.compose.material3.LinearProgressIndicator
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Surface
 import androidx.compose.material3.Tab
+import androidx.compose.material3.TabPosition
 import androidx.compose.material3.TabRow
+import androidx.compose.material3.TabRowDefaults
+import androidx.compose.material3.TabRowDefaults.tabIndicatorOffset
 import androidx.compose.material3.Text
+import androidx.compose.material3.contentColorFor
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
@@ -41,7 +47,6 @@ class MainActivity : ComponentActivity() {
         super.onCreate(savedInstanceState)
         setContent {
             TestComposeAndersenTheme {
-                // A surface container using the 'background' color from the theme
                 Surface(
                     modifier = Modifier.fillMaxSize(),
                     color = MaterialTheme.colorScheme.background
@@ -65,11 +70,13 @@ fun TabScreen() {
     )
 
     Column(
-        modifier = Modifier.fillMaxWidth().padding(top = 10.dp)
+        modifier = Modifier
+            .fillMaxWidth()
+            .padding(top = 10.dp)
     ) {
         TabRow(
             selectedTabIndex = tabIndex,
-            Modifier.background(Color.Blue)
+            modifier = Modifier.fillMaxWidth(),
         ) {
             tabs.forEachIndexed { index, title ->
                 Tab(
@@ -79,7 +86,7 @@ fun TabScreen() {
                 ) {
                     Row(
                         verticalAlignment = Alignment.CenterVertically,
-                        horizontalArrangement = Arrangement.SpaceBetween
+                        horizontalArrangement = Arrangement.Start,
                     ) {
                         Text(
                             text = title.tabName,
@@ -87,13 +94,15 @@ fun TabScreen() {
                                 Color.Black
                             } else {
                                 Color.Gray
-                            }
+                            },
+                            fontSize = 14.sp,
+
                         )
                         if (title.tabNotiCount > 0) {
                             Box(
                                 modifier = Modifier
                                     .padding(start = 4.dp)
-                                    .size(24.dp)
+                                    .size(20.dp)
                                     .background(
                                         color = if (tabIndex == index) {
                                             Color.Blue
@@ -133,8 +142,6 @@ fun TabScreen() {
         }
     }
 }
-
-
 
 data class Tabs(
     val tabName:String,
