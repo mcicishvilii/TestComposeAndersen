@@ -98,7 +98,7 @@ fun CustomScrollableTabRow(
     selectedTabIndex: Int,
     onTabClick: (Int) -> Unit
 ) {
-    val indicatorColor = Color.hsv(336f, 0.85f, 0.89f)
+    val indicatorColor = Color.hsl(337f, 0.65f, 0.51f)
     val backgroundColor = Color.hsv(0f, 0f, 0.97f)
     val density = LocalDensity.current
     val tabWidths = remember {
@@ -118,12 +118,17 @@ fun CustomScrollableTabRow(
             modifier = Modifier.fillMaxWidth(),
             selectedTabIndex = selectedTabIndex,
             contentColor = Color.White,
+            divider = {},
             indicator = { tabPositions ->
-                TabRowDefaults.Indicator(
-                    modifier = Modifier.customTabIndicatorOffset(
+                Box(
+                    modifier = Modifier
+                        .customTabIndicatorOffset(
                         currentTabPosition = tabPositions[selectedTabIndex],
-                        tabWidth = tabWidths[selectedTabIndex]
+                        tabWidth = tabWidths[selectedTabIndex],
                     )
+                        .height(4.dp)
+                        .clip(RoundedCornerShape(8.dp))
+                        .background(indicatorColor)
                 )
             }
         ) {
