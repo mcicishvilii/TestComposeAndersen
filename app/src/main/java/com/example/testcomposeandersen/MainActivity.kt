@@ -61,7 +61,7 @@ fun TabScreen() {
         Tabs("All", 4),
         Tabs("Friends", 2),
         Tabs("FromForte", 1),
-        Tabs("Partner", 0)
+        Tabs("Partner", 30)
     )
 
     Column(
@@ -79,7 +79,7 @@ fun TabScreen() {
                 ) {
                     Row(
                         verticalAlignment = Alignment.CenterVertically,
-                        horizontalArrangement = Arrangement.spacedBy(4.dp)
+                        horizontalArrangement = Arrangement.SpaceBetween
                     ) {
                         Text(
                             text = title.tabName,
@@ -92,22 +92,23 @@ fun TabScreen() {
                         if (title.tabNotiCount > 0) {
                             Box(
                                 modifier = Modifier
-                                    .size(24.dp) // Set the size of the outer Box
+                                    .padding(start = 4.dp)
+                                    .size(24.dp)
                                     .background(
                                         color = if (tabIndex == index) {
                                             Color.Blue
                                         } else {
                                             Color.Gray
                                         },
-                                        shape = MaterialTheme.shapes.small
+                                        shape = MaterialTheme.shapes.medium
                                     ),
                                 contentAlignment = Alignment.Center
                             ) {
                                 Box(
                                     modifier = Modifier
-                                        .size(20.dp) // Set the size of the inner Box
+                                        .size(20.dp)
                                         .background(
-                                            color = Color.Transparent, // Set a transparent background
+                                            color = Color.Transparent,
                                             shape = MaterialTheme.shapes.small
                                         ),
                                     contentAlignment = Alignment.Center
