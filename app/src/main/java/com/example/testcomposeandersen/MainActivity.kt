@@ -66,95 +66,107 @@ class MainActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContent {
+            var selectedTabIndex by remember { mutableStateOf(0) }
+
+            val tabs = listOf(
+                Tabs("All", 3),
+                Tabs("Friends", 3),
+                Tabs("FromForte", 0),
+                Tabs("Partner", 0)
+            )
             TestComposeAndersenTheme {
-                Surface(
-                    modifier = Modifier.fillMaxSize(),
-                    color = MaterialTheme.colorScheme.background
-                ) {
-                    TabScreen()
+                CustomScrollableTabRow(
+                    tabs = tabs,
+                    selectedTabIndex = selectedTabIndex,
+                ) { tabIndex ->
+                    selectedTabIndex = tabIndex
                 }
             }
         }
     }
 }
 
+
+data class Tabs(
+    val tabName: String,
+    val tabNotiCount: Int
+)
+
 @Composable
-fun TabScreen() {
-    var tabIndex by remember { mutableStateOf(0) }
-
-    val tabs = listOf(
-        Tabs("All", 3),
-        Tabs("Friends", 3),
-        Tabs("FromForte", 0),
-        Tabs("Partner", 0)
-    )
-
-    val indicatorColor = Color.hsv(336f, 0.85f, 0.89f)
+fun CustomScrollableTabRow(
+    tabs: List<Tabs>,
+    selectedTabIndex: Int,
+    onTabClick: (Int) -> Unit
+) {
+    val indicatorColor = Color.hsl(337f, 0.65f, 0.51f)
     val backgroundColor = Color.hsv(0f, 0f, 0.97f)
-
-
     val density = LocalDensity.current
     val tabWidths = remember {
-        val tabWidthStateList = mutableStateListOf<Dp>()
-        repeat(tabs.size) {
-            tabWidthStateList.add(0.dp)
+        mutableStateListOf<Dp>().apply {
+            repeat(tabs.size) {
+                add(0.dp)
+            }
         }
-        tabWidthStateList
     }
-
 
     Column(
         modifier = Modifier
-            .fillMaxWidth()
+            .fillMaxSize()
             .background(backgroundColor)
-
     ) {
         TabRow(
             modifier = Modifier.fillMaxWidth(),
-            selectedTabIndex = tabIndex,
+            selectedTabIndex = selectedTabIndex,
+            contentColor = Color.White,
             divider = {},
             indicator = { tabPositions ->
-                TabRowDefaults.Indicator(
-                    modifier = Modifier.customTabIndicatorOffset(
-                        currentTabPosition = tabPositions[tabIndex],
-                        tabWidth = tabWidths[tabIndex]
-                    )
+                Box(
+                    modifier = Modifier
+                        .customTabIndicatorOffset(
+                            currentTabPosition = tabPositions[selectedTabIndex],
+                            tabWidth = tabWidths[selectedTabIndex],
+                            totalTabWidth = tabWidths[selectedTabIndex]
+                        )
+                        .height(4.dp)
+                        .clip(RoundedCornerShape(8.dp))
+                        .background(indicatorColor)
                 )
             }
         ) {
-            tabs.forEachIndexed { index, title ->
+            tabs.forEachIndexed { tabIndex, tab ->
                 Tab(
-                    selected = tabIndex == index,
-                    onClick = { tabIndex = index },
+                    selected = selectedTabIndex == tabIndex,
+                    onClick = { onTabClick(tabIndex) },
                     modifier = Modifier
                         .height(48.dp)
-                        .background(Color.White)
+                        .background(Color.White),
                 ) {
                     Row(
                         verticalAlignment = Alignment.CenterVertically,
                         horizontalArrangement = Arrangement.Start,
                     ) {
                         Text(
-                            text = title.tabName,
-                            color = if (tabIndex == index) {
+                            text = tab.tabName,
+                            color = if (selectedTabIndex == tabIndex) {
                                 Color.Black
                             } else {
                                 Color.Gray
                             },
                             fontSize = 14.sp,
                             onTextLayout = { textLayoutResult ->
-                                tabWidths[tabIndex] =
-                                    with(density) { textLayoutResult.size.width.toDp() }
+                                val textWidth = with(density) { textLayoutResult.size.width.toDp() }
+                                val badgeWidth = if (tab.tabNotiCount > 0) 20.dp else 0.dp
+                                val totalTabWidth = textWidth + badgeWidth
+                                tabWidths[tabIndex] = totalTabWidth
                             }
-
-                            )
-                        if (title.tabNotiCount > 0) {
+                        )
+                        if (tab.tabNotiCount > 0) {
                             Box(
                                 modifier = Modifier
                                     .padding(start = 4.dp)
                                     .size(20.dp)
                                     .background(
-                                        color = if (tabIndex == index) {
+                                        color = if (selectedTabIndex == tabIndex) {
                                             Color.Blue
                                         } else {
                                             Color.Gray
@@ -173,7 +185,7 @@ fun TabScreen() {
                                     contentAlignment = Alignment.Center
                                 ) {
                                     Text(
-                                        text = title.tabNotiCount.toString(),
+                                        text = tab.tabNotiCount.toString(),
                                         color = Color.White,
                                         fontSize = 12.sp,
                                     )
@@ -185,7 +197,7 @@ fun TabScreen() {
             }
         }
 
-        when (tabIndex) {
+        when (selectedTabIndex) {
             0 -> All()
             1 -> Friends()
             2 -> FromForte()
@@ -195,15 +207,10 @@ fun TabScreen() {
 }
 
 
-
-data class Tabs(
-    val tabName:String,
-    val tabNotiCount:Int
-)
-
 fun Modifier.customTabIndicatorOffset(
     currentTabPosition: TabPosition,
-    tabWidth: Dp
+    tabWidth: Dp,
+    totalTabWidth: Dp
 ): Modifier = composed(
     inspectorInfo = debugInspectorInfo {
         name = "customTabIndicatorOffset"
@@ -211,11 +218,11 @@ fun Modifier.customTabIndicatorOffset(
     }
 ) {
     val currentTabWidth by animateDpAsState(
-        targetValue = tabWidth,
+        targetValue = totalTabWidth,
         animationSpec = tween(durationMillis = 250, easing = FastOutSlowInEasing)
     )
     val indicatorOffset by animateDpAsState(
-        targetValue = ((currentTabPosition.left + currentTabPosition.right - tabWidth) / 2),
+        targetValue = ((currentTabPosition.left + currentTabPosition.right - totalTabWidth) / 2),
         animationSpec = tween(durationMillis = 250, easing = FastOutSlowInEasing)
     )
     fillMaxWidth()
