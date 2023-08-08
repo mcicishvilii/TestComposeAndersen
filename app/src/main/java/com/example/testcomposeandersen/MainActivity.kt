@@ -63,10 +63,10 @@ fun TabScreen() {
     var tabIndex by remember { mutableStateOf(0) }
 
     val tabs = listOf(
-        Tabs("All", 4),
-        Tabs("Friends", 2),
-        Tabs("FromForte", 1),
-        Tabs("Partner", 30)
+        Tabs("All", 3),
+        Tabs("Friends", 3),
+        Tabs("FromForte", 0),
+        Tabs("Partner", 0)
     )
 
     Column(
@@ -77,6 +77,13 @@ fun TabScreen() {
         TabRow(
             selectedTabIndex = tabIndex,
             modifier = Modifier.fillMaxWidth(),
+            indicator = { tabPositions ->
+                val indicatorColor = Color.hsv(270f, 0.75f, 0.9f)
+                TabRowDefaults.Indicator(
+                    modifier = Modifier.tabIndicatorOffset(tabPositions[tabIndex]),
+                    color = indicatorColor,
+                )
+            }
         ) {
             tabs.forEachIndexed { index, title ->
                 Tab(
