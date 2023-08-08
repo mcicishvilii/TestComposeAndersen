@@ -88,8 +88,8 @@ class MainActivity : ComponentActivity() {
 
 
 data class Tabs(
-    val tabName:String,
-    val tabNotiCount:Int
+    val tabName: String,
+    val tabNotiCount: Int
 )
 
 @Composable
@@ -98,6 +98,8 @@ fun CustomScrollableTabRow(
     selectedTabIndex: Int,
     onTabClick: (Int) -> Unit
 ) {
+    val indicatorColor = Color.hsv(336f, 0.85f, 0.89f)
+    val backgroundColor = Color.hsv(0f, 0f, 0.97f)
     val density = LocalDensity.current
     val tabWidths = remember {
         val tabWidthStateList = mutableStateListOf<Dp>()
@@ -106,39 +108,96 @@ fun CustomScrollableTabRow(
         }
         tabWidthStateList
     }
-    TabRow(
-        selectedTabIndex = selectedTabIndex,
-        contentColor = Color.White,
-        indicator = { tabPositions ->
-            TabRowDefaults.Indicator(
-                modifier = Modifier.customTabIndicatorOffset(
-                    currentTabPosition = tabPositions[selectedTabIndex],
-                    tabWidth = tabWidths[selectedTabIndex]
-                )
-            )
-        }
+
+    Column(
+        modifier = Modifier
+            .fillMaxWidth()
+            .background(backgroundColor)
+
     ) {
-        tabs.forEachIndexed { tabIndex, tab ->
-            Tab(
-                selected = selectedTabIndex == tabIndex,
-                onClick = { onTabClick(tabIndex) },
-                modifier = Modifier
-                    .height(48.dp)
-                    .background(Color.White),
-                text = {
-                    Text(
-                        text = tab.tabName,
-                        color = Color.Black,
-                        onTextLayout = { textLayoutResult ->
-                            tabWidths[tabIndex] =
-                                with(density) { textLayoutResult.size.width.toDp() }
-                        }
+        TabRow(
+            modifier = Modifier.fillMaxWidth(),
+            selectedTabIndex = selectedTabIndex,
+            contentColor = Color.White,
+            indicator = { tabPositions ->
+                TabRowDefaults.Indicator(
+                    modifier = Modifier.customTabIndicatorOffset(
+                        currentTabPosition = tabPositions[selectedTabIndex],
+                        tabWidth = tabWidths[selectedTabIndex]
                     )
+                )
+            }
+        ) {
+            tabs.forEachIndexed { tabIndex, tab ->
+                Tab(
+                    selected = selectedTabIndex == tabIndex,
+                    onClick = { onTabClick(tabIndex) },
+                    modifier = Modifier
+                        .height(48.dp)
+                        .background(Color.White),
+                ) {
+                    Row(
+                        verticalAlignment = Alignment.CenterVertically,
+                        horizontalArrangement = Arrangement.Start,
+                    ) {
+                        Text(
+                            text = tab.tabName,
+                            color = if (selectedTabIndex == tabIndex) {
+                                Color.Black
+                            } else {
+                                Color.Gray
+                            },
+                            fontSize = 14.sp,
+                            onTextLayout = { textLayoutResult ->
+                                tabWidths[tabIndex] =
+                                    with(density) { textLayoutResult.size.width.toDp() }
+                            }
+                        )
+                        if (tab.tabNotiCount > 0) {
+                            Box(
+                                modifier = Modifier
+                                    .padding(start = 4.dp)
+                                    .size(20.dp)
+                                    .background(
+                                        color = if (selectedTabIndex == tabIndex) {
+                                            Color.Blue
+                                        } else {
+                                            Color.Gray
+                                        },
+                                        shape = MaterialTheme.shapes.medium
+                                    ),
+                                contentAlignment = Alignment.Center
+                            ) {
+                                Box(
+                                    modifier = Modifier
+                                        .size(20.dp)
+                                        .background(
+                                            color = Color.Transparent,
+                                            shape = MaterialTheme.shapes.small
+                                        ),
+                                    contentAlignment = Alignment.Center
+                                ) {
+                                    Text(
+                                        text = tab.tabNotiCount.toString(),
+                                        color = Color.White,
+                                        fontSize = 12.sp,
+                                    )
+                                }
+                            }
+                        }
+                    }
                 }
-            )
+            }
+//            when (selectedTabIndex) {
+//                0 -> All()
+//                1 -> Friends()
+//                2 -> FromForte()
+//                3 -> Partner()
+//            }
         }
     }
 }
+
 
 fun Modifier.customTabIndicatorOffset(
     currentTabPosition: TabPosition,
