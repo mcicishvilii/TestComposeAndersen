@@ -3,9 +3,14 @@ package com.example.testcomposeandersen
 import android.os.Bundle
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
+import androidx.compose.foundation.background
+import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Surface
@@ -17,9 +22,13 @@ import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
+import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.node.modifierElementOf
+import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import androidx.compose.ui.unit.sp
 import com.example.testcomposeandersen.ui.screens.All
 import com.example.testcomposeandersen.ui.screens.Friends
 import com.example.testcomposeandersen.ui.screens.FromForte
@@ -47,19 +56,62 @@ class MainActivity : ComponentActivity() {
 fun TabScreen() {
     var tabIndex by remember { mutableStateOf(0) }
 
-    val tabs = listOf("All", "Friends", "FromForte","Partner")
+    val tabs = listOf(
+        Tabs("All", 4),
+        Tabs("Friends", 2),
+        Tabs("FromForte", 1),
+        Tabs("Partner", 0)
+    )
 
     Column(
-        modifier = Modifier.fillMaxWidth().padding(top = 10.dp)) {
+        modifier = Modifier.fillMaxWidth().padding(top = 10.dp)
+    ) {
         TabRow(
-            selectedTabIndex = tabIndex) {
+            selectedTabIndex = tabIndex,
+            Modifier.background(Color.Blue)
+        ) {
             tabs.forEachIndexed { index, title ->
-                Tab(text = { Text(title) },
+                Tab(
                     selected = tabIndex == index,
                     onClick = { tabIndex = index },
-                    selectedContentColor = MaterialTheme.colorScheme.primaryContainer,
-                    unselectedContentColor = MaterialTheme.colorScheme.secondaryContainer,
-                )
+                    modifier = Modifier.height(48.dp)
+                ) {
+                    Row(
+                        verticalAlignment = Alignment.CenterVertically,
+                        horizontalArrangement = Arrangement.spacedBy(4.dp)
+                    ) {
+                        Text(
+                            text = title.tabName,
+                            color = if (tabIndex == index) {
+                                MaterialTheme.colorScheme.primaryContainer
+                            } else {
+                                MaterialTheme.colorScheme.secondaryContainer
+                            }
+                        )
+                        if (title.tabNotiCount > 0) {
+                            Box(
+                                modifier = Modifier
+                                    .padding(4.dp)
+                                    .background(
+                                        color = if (tabIndex == index) {
+                                            Color.Blue
+                                        } else {
+                                            Color.Red
+                                        },
+                                        shape = MaterialTheme.shapes.small
+                                    ),
+                                contentAlignment = Alignment.Center
+                            ) {
+                                Text(
+                                    text = title.tabNotiCount.toString(),
+                                    color = Color.White,
+                                    fontSize = 12.sp,
+                                    modifier = Modifier.padding(4.dp)
+                                )
+                            }
+                        }
+                    }
+                }
             }
         }
         when (tabIndex) {
@@ -70,3 +122,10 @@ fun TabScreen() {
         }
     }
 }
+
+
+
+data class Tabs(
+    val tabName:String,
+    val tabNotiCount:Int
+)
