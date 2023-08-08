@@ -18,6 +18,7 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.unit.dp
 import com.example.testcomposeandersen.ui.screens.All
 import com.example.testcomposeandersen.ui.screens.Friends
@@ -48,12 +49,16 @@ fun TabScreen() {
 
     val tabs = listOf("All", "Friends", "FromForte","Partner")
 
-    Column(modifier = Modifier.fillMaxWidth().padding(top = 10.dp)) {
-        TabRow(selectedTabIndex = tabIndex) {
+    Column(
+        modifier = Modifier.fillMaxWidth().padding(top = 10.dp)) {
+        TabRow(
+            selectedTabIndex = tabIndex) {
             tabs.forEachIndexed { index, title ->
                 Tab(text = { Text(title) },
                     selected = tabIndex == index,
                     onClick = { tabIndex = index },
+                    selectedContentColor = MaterialTheme.colorScheme.primaryContainer,
+                    unselectedContentColor = MaterialTheme.colorScheme.secondaryContainer,
                 )
             }
         }
