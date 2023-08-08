@@ -12,6 +12,7 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.size
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Surface
 import androidx.compose.material3.Tab
@@ -83,31 +84,40 @@ fun TabScreen() {
                         Text(
                             text = title.tabName,
                             color = if (tabIndex == index) {
-                                MaterialTheme.colorScheme.primaryContainer
+                                Color.Black
                             } else {
-                                MaterialTheme.colorScheme.secondaryContainer
+                                Color.Gray
                             }
                         )
                         if (title.tabNotiCount > 0) {
                             Box(
                                 modifier = Modifier
-                                    .padding(4.dp)
+                                    .size(24.dp) // Set the size of the outer Box
                                     .background(
                                         color = if (tabIndex == index) {
                                             Color.Blue
                                         } else {
-                                            Color.Red
+                                            Color.Gray
                                         },
                                         shape = MaterialTheme.shapes.small
                                     ),
                                 contentAlignment = Alignment.Center
                             ) {
-                                Text(
-                                    text = title.tabNotiCount.toString(),
-                                    color = Color.White,
-                                    fontSize = 12.sp,
-                                    modifier = Modifier.padding(4.dp)
-                                )
+                                Box(
+                                    modifier = Modifier
+                                        .size(20.dp) // Set the size of the inner Box
+                                        .background(
+                                            color = Color.Transparent, // Set a transparent background
+                                            shape = MaterialTheme.shapes.small
+                                        ),
+                                    contentAlignment = Alignment.Center
+                                ) {
+                                    Text(
+                                        text = title.tabNotiCount.toString(),
+                                        color = Color.White,
+                                        fontSize = 12.sp,
+                                    )
+                                }
                             }
                         }
                     }
