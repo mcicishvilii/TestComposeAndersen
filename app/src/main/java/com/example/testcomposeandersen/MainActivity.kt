@@ -1,6 +1,7 @@
 package com.example.testcomposeandersen
 
 import android.os.Bundle
+import android.util.Log
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.compose.foundation.Image
@@ -25,7 +26,7 @@ class MainActivity : ComponentActivity() {
                         .fillMaxWidth()
                         .background(Color.Gray)
                 ) {
-                    CustomProgressBar(4)
+                    CustomProgressBar(7)
                 }
             }
         }
@@ -35,23 +36,26 @@ class MainActivity : ComponentActivity() {
 
 @Composable
 fun CustomProgressBar(progressCount: Int) {
-    val maxProgressCount = 6
+    val maxProgressCount = 7
 
     Row(
         modifier = Modifier
             .fillMaxWidth()
             .padding(top = 100.dp, start = 30.dp, end = 30.dp, bottom = 100.dp),
     ) {
-        for (index in 0 until maxProgressCount) {
+        for (index in 1..maxProgressCount) {
             if (index <= progressCount) {
                 val logotype = painterResource(id = when (index) {
-                    0 -> R.drawable.logo_0
-                    1 -> R.drawable.logo_1
-                    2 -> R.drawable.logo_2
-                    3 -> R.drawable.logo_3
-                    4 -> R.drawable.logo_4
-                    5 -> R.drawable.logo_5
-                    else -> R.drawable.logo_6
+                    1 -> R.drawable.logo_0
+                    2 -> R.drawable.logo_1
+                    3 -> R.drawable.logo_2
+                    4 -> R.drawable.logo_3
+                    5 -> R.drawable.logo_4
+                    6 -> R.drawable.logo_5
+                    7 -> R.drawable.logo_6
+                    else -> {
+                        R.drawable.ic_launcher_background
+                    }
                 })
 
                 Image(
@@ -64,3 +68,4 @@ fun CustomProgressBar(progressCount: Int) {
         }
     }
 }
+
