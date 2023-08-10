@@ -46,15 +46,18 @@ class MainActivity : ComponentActivity() {
 @Composable
 fun CustomProgressBar() {
     val context = LocalContext.current
-    var progressCount: Int by remember { mutableStateOf(0) }
+    var progressCount: Int by remember { mutableStateOf(1) }
     var progress by remember { mutableStateOf(0f) }
+    var image :Int = R.drawable.ic_28_forte_logo
 
     when (progressCount) {
         0 -> {
-            progress = 0.0f
+            progress = 0.0f;
+            image = R.drawable.ic_launcher_background
         }
         1 -> {
-            progress = 0.1f
+            progress = 0.1f;
+            image = R.drawable.ic_28_forte_logo
         }
         2 -> {
             progress = 0.2f
@@ -74,94 +77,22 @@ fun CustomProgressBar() {
         7 -> {
             progress = 0.7f
         }
-//        8 -> progress = 0.8f
-//        9 -> progress = 0.9f
-//        10 -> progress = 1.0f
     }
-
-    val size by animateFloatAsState(
-        targetValue = progress,
-        tween(
-            durationMillis = 1000,
-            delayMillis = 200,
-            easing = LinearOutSlowInEasing
-        )
-    )
 
     Column(
         modifier = Modifier
             .fillMaxSize()
             .padding(top = 100.dp, start = 30.dp, end = 30.dp)
     ) {
-        // for the text above the progressBar
-        Row(
-            modifier = Modifier
-                .widthIn(min = 30.dp)
-                .fillMaxWidth(size),
-            horizontalArrangement = Arrangement.End
-        ) {
-            androidx.compose.material3.Text(text = "$progress")
-        }
+
         // Progress Bar
         Image(
             modifier = Modifier
                 .fillMaxWidth()
-                .height(17.dp),
-            painter = painterResource(id = R.drawable.ic_28_forte_logo),
+                .height(37.dp),
+            painter = painterResource(image),
             contentDescription = "sdada"
-
         )
-
-
-        // controling only increase and decrease. buttons and toasts.
-        Row(
-            modifier = Modifier
-                .fillMaxWidth()
-                .padding(top = 30.dp),
-            horizontalArrangement = Arrangement.SpaceBetween
-        ) {
-            androidx.compose.material3.OutlinedButton(onClick = {
-                if (progressCount > 0) {
-                    progressCount -= 2
-                } else {
-                    Toast.makeText(context, "You cannot decrease any more", Toast.LENGTH_SHORT)
-                        .show()
-                }
-            }) {
-                androidx.compose.material3.Text(text = "Decrease")
-            }
-            androidx.compose.material3.Button(onClick = {
-                if (progressCount < 10) {
-                    progressCount += 2
-                } else {
-                    Toast.makeText(context, "You cannot increase more", Toast.LENGTH_SHORT).show()
-                }
-            }) {
-                androidx.compose.material3.Text(text = "Increase")
-            }
-        }
-
-
     }
 }
 
-
-
-//{
-//            // for the background of the ProgressBar
-//            Box(
-//                modifier = Modifier
-//                    .fillMaxSize()
-//                    .clip(RoundedCornerShape(9.dp))
-//                    .background(Color.Gray)
-//            )
-//            // for the progress of the ProgressBar
-//            Box(
-//                modifier = Modifier
-//                    .fillMaxWidth(size)
-//                    .fillMaxHeight()
-//                    .clip(RoundedCornerShape(9.dp))
-//                    .background(Color.Blue)
-//                    .animateContentSize()
-//            )
-//}
