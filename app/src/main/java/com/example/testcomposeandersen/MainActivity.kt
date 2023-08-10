@@ -24,7 +24,7 @@ class MainActivity : ComponentActivity() {
                 Column(
                     modifier = Modifier
                         .fillMaxWidth()
-                        .background(Color.Gray)
+                        .background(Color.hsl(0.0f, 0.0f, 0.11f))
                 ) {
                     CustomProgressBar(7)
                 }
@@ -41,7 +41,9 @@ fun CustomProgressBar(progressCount: Int) {
     Row(
         modifier = Modifier
             .fillMaxWidth()
-            .padding(top = 100.dp, start = 30.dp, end = 30.dp, bottom = 100.dp),
+            .padding(top = 10.dp, start = 80.dp, end = 50.dp, bottom = 10.dp)
+            ,
+        horizontalArrangement = Arrangement.Start
     ) {
         for (index in 1..maxProgressCount) {
             if (index <= progressCount) {
