@@ -14,4 +14,6 @@ fun Friends() {
     Column(modifier = Modifier.fillMaxSize().padding(top = 20.dp), horizontalAlignment = Alignment.CenterHorizontally){
         Text(text = "Friends",)
     }
+
+
 }

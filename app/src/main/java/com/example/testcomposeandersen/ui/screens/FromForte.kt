@@ -18,5 +18,6 @@ fun FromForte() {
         horizontalAlignment = Alignment.CenterHorizontally,
         ){
         Text(text = "FromForte",)
+        FillingIconScreen()
     }
 }
