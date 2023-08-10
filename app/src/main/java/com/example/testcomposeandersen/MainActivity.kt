@@ -12,14 +12,16 @@ import androidx.compose.animation.core.tween
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.*
-import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.*
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.draw.clip
+import androidx.compose.ui.graphics.BlendMode
+import androidx.compose.ui.graphics.Canvas
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.graphics.ColorFilter
 import androidx.compose.ui.graphics.painter.Painter
+import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.unit.dp
@@ -35,7 +37,7 @@ class MainActivity : ComponentActivity() {
                         .fillMaxSize()
                         .background(Color.Gray)
                 ) {
-                    CustomProgressBar()
+                    CustomProgressBar(1)
                 }
             }
         }
@@ -44,55 +46,33 @@ class MainActivity : ComponentActivity() {
 
 
 @Composable
-fun CustomProgressBar() {
-    val context = LocalContext.current
-    var progressCount: Int by remember { mutableStateOf(1) }
-    var progress by remember { mutableStateOf(0f) }
-    var image :Int = R.drawable.ic_28_forte_logo
+fun CustomProgressBar(progressCount: Int) {
+    val logos = List(7) { index ->
+        val fillPercent = (index + 1) * 0.1f
+        val image = if (index + 1 <= progressCount) R.drawable.ic_launcher_background else R.drawable.ic_28_forte_logo
 
-    when (progressCount) {
-        0 -> {
-            progress = 0.0f;
-            image = R.drawable.ic_launcher_background
-        }
-        1 -> {
-            progress = 0.1f;
-            image = R.drawable.ic_28_forte_logo
-        }
-        2 -> {
-            progress = 0.2f
-        }
-        3 -> {
-            progress = 0.3f
-        }
-        4 -> {
-            progress = 0.4f
-        }
-        5 -> {
-            progress = 0.5f
-        }
-        6 -> {
-            progress = 0.6f
-        }
-        7 -> {
-            progress = 0.7f
+        Column(
+            modifier = Modifier
+                .height(37.dp)
+        ) {
+            Image(
+                modifier = Modifier.fillMaxSize(),
+                painter = painterResource(image),
+                contentDescription = "Logo $index",
+                colorFilter = ColorFilter.tint(Color.Red, BlendMode.SrcIn),
+                contentScale = ContentScale.Inside
+            )
         }
     }
 
-    Column(
+    Row(
         modifier = Modifier
-            .fillMaxSize()
-            .padding(top = 100.dp, start = 30.dp, end = 30.dp)
+            .fillMaxWidth()
+            .padding(top = 100.dp, start = 30.dp, end = 30.dp),
+        horizontalArrangement = Arrangement.SpaceBetween
     ) {
-
-        // Progress Bar
-        Image(
-            modifier = Modifier
-                .fillMaxWidth()
-                .height(37.dp),
-            painter = painterResource(image),
-            contentDescription = "sdada"
-        )
+        logos.forEach { logo ->
+            logo
+        }
     }
 }
-
