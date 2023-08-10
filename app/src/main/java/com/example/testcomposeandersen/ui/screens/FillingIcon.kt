@@ -58,12 +58,6 @@ fun FillingIcon(progress: Float, iconResId: Int, androidIconPath: AndroidPath) {
                 size = Size(clipWidth, size.height)
             )
         }
-
-        // Draw the icon outline (using the outline of your drawable)
-        drawIntoCanvas { canvas ->
-            drawable?.setBounds(0, 0, size.width.toInt(), size.height.toInt())
-            drawable?.draw(canvas.nativeCanvas)
-        }
     }
 }
 @Composable
