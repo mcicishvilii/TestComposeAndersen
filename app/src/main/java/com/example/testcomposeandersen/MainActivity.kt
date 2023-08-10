@@ -35,38 +35,32 @@ class MainActivity : ComponentActivity() {
 
 @Composable
 fun CustomProgressBar(progressCount: Int) {
-    val maxProgressCount = 7
+    val maxProgressCount = 6
 
     Row(
         modifier = Modifier
             .fillMaxWidth()
-            .padding(top = 100.dp, start = 30.dp, end = 30.dp),
-        horizontalArrangement = Arrangement.SpaceBetween
+            .padding(top = 100.dp, start = 30.dp, end = 30.dp, bottom = 100.dp),
     ) {
         for (index in 0 until maxProgressCount) {
-            val logoVisible = index <= progressCount
+            if (index <= progressCount) {
+                val logotype = painterResource(id = when (index) {
+                    0 -> R.drawable.logo_0
+                    1 -> R.drawable.logo_1
+                    2 -> R.drawable.logo_2
+                    3 -> R.drawable.logo_3
+                    4 -> R.drawable.logo_4
+                    5 -> R.drawable.logo_5
+                    else -> R.drawable.logo_6
+                })
 
-            val logotype = painterResource(id = when {
-                index == 0 -> R.drawable.logo_0
-                index == 1 -> R.drawable.logo_1
-                index == 2 -> R.drawable.logo_2
-                index == 3 -> R.drawable.logo_3
-                index == 4 -> R.drawable.logo_4
-                index == 5 -> R.drawable.logo_5
-                index == 6 -> R.drawable.logo_7
-                else -> R.drawable.logo_7
-            })
-
-            Image(
-                painter = logotype,
-                contentDescription = null,
-                modifier = Modifier
-                    .height(37.dp)
-                    .background(
-                        color = if (logoVisible) Color.Green else Color.Transparent,
-                        shape = MaterialTheme.shapes.small
-                    )
-            )
+                Image(
+                    painter = logotype,
+                    contentDescription = null,
+                    modifier = Modifier
+                        .height(37.dp)
+                )
+            }
         }
     }
 }
