@@ -13,6 +13,7 @@ import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.*
 import androidx.compose.material.*
+import androidx.compose.material3.MaterialTheme
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -34,10 +35,10 @@ class MainActivity : ComponentActivity() {
             TestComposeAndersenTheme() {
                 Column(
                     modifier = Modifier
-                        .fillMaxSize()
+                        .fillMaxWidth()
                         .background(Color.Gray)
                 ) {
-                    CustomProgressBar(1)
+                    CustomProgressBar(4)
                 }
             }
         }
@@ -47,22 +48,22 @@ class MainActivity : ComponentActivity() {
 
 @Composable
 fun CustomProgressBar(progressCount: Int) {
-    val logos = List(7) { index ->
-        val fillPercent = (index + 1) * 0.1f
-        val image = if (index + 1 <= progressCount) R.drawable.ic_launcher_background else R.drawable.ic_28_forte_logo
+    val maxProgressCount = 7
+    val logos = List(maxProgressCount) { index ->
+        val fillPercentage =
+            if (index < progressCount) (index + 1) * 100 / maxProgressCount.toFloat() else 0f
+        val color = if (index < progressCount) Color.Red else Color.Gray
 
-        Column(
+        Image(
+            painter = painterResource(id = R.drawable.ic_28_forte_logo),
+            "asda",
             modifier = Modifier
                 .height(37.dp)
-        ) {
-            Image(
-                modifier = Modifier.fillMaxSize(),
-                painter = painterResource(image),
-                contentDescription = "Logo $index",
-                colorFilter = ColorFilter.tint(Color.Red, BlendMode.SrcIn),
-                contentScale = ContentScale.Inside
-            )
-        }
+                .background(
+                    color = color,
+                    shape = MaterialTheme.shapes.small
+                )
+        )
     }
 
     Row(
@@ -72,7 +73,19 @@ fun CustomProgressBar(progressCount: Int) {
         horizontalArrangement = Arrangement.SpaceBetween
     ) {
         logos.forEach { logo ->
+            Spacer(modifier = Modifier.weight(1f))
             logo
         }
     }
+}
+
+@Composable
+fun ProgressBarFill(fillPercentage: Float, color: Color) {
+    val size = (fillPercentage / 100f).coerceIn(0f, 1f)
+    Box(
+        modifier = Modifier
+            .fillMaxHeight()
+            .width(size.dp)
+            .background(color)
+    )
 }
