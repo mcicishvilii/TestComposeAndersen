@@ -230,3 +230,5 @@ fun Modifier.customTabIndicatorOffset(
         .offset(x = indicatorOffset)
         .width(currentTabWidth)
 }
+
+
