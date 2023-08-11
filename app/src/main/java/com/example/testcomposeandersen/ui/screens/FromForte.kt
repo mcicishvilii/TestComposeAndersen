@@ -20,6 +20,6 @@ fun FromForte() {
         horizontalAlignment = Alignment.CenterHorizontally,
         ){
         Text(text = "FromForte",)
-        FillingIcon(0.1f, Color.Green, R.color.purple_500)
+        FillingIcon(0.3f, Color.hsl(335f,0.76f,0.5f), R.color.purple_500)
     }
 }
