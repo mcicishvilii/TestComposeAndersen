@@ -46,13 +46,13 @@ fun FillingIcon(progress: Float, fillColor: Color) {
         val clipHeight = size.height * progress
         val vectorPath = PathParser().parsePathString(vectorPathData).toPath()
 
-        drawPath(vectorPath,Color.Gray )
+        drawPath(vectorPath,Color.hsl(326f,0.78f,0.95f))
         val clipTop = size.height - clipHeight
 
         clipPath(vectorPath) {
             // Draw the clip rectangle starting from the calculated top position
             drawRect(
-                color = Color.hsl(335f, 0.76f, 0.5f), // Use grey color for clip area
+                color = fillColor, // Use grey color for clip area
                 topLeft = Offset(0f, clipTop),
                 size = Size(size.width, size.height - clipTop)
             )
