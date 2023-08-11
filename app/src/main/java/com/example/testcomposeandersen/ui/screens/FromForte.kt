@@ -8,7 +8,9 @@ import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.unit.dp
+import com.example.testcomposeandersen.R
 
 @Composable
 fun FromForte() {
@@ -18,6 +20,6 @@ fun FromForte() {
         horizontalAlignment = Alignment.CenterHorizontally,
         ){
         Text(text = "FromForte",)
-        FillingIconScreen()
+        FillingIcon(0.1f, Color.Green, R.color.purple_500)
     }
 }
